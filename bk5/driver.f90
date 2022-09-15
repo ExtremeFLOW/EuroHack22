@@ -103,11 +103,11 @@ subroutine set_timer_flop_cnt(iset, nelt, nx1, niter, n)
      write(log_buf, '(A, I7)')   'Iters   : ', niter
      call neko_log%message(log_buf)
      if (nx1 .lt. 10) then        
-        write(log_buf, '(A, I1)')  'lx      : ', nx1
+        write(log_buf, '(A, I1)') 'lx      :   ', nx1
      else if (nx1 .ge. 10) then
-        write(log_buf, '(A, I2)') 'lx      : ', nx1
+        write(log_buf, '(A, I2)') 'lx      :  ', nx1
      else
-        write(log_buf, '(A, I3)') 'lx      : ', nx1
+        write(log_buf, '(A, I3)') 'lx      :  ', nx1
      end if
      call neko_log%message(log_buf)
      call neko_log%end()
