@@ -54,11 +54,13 @@ program axbench
 
   n_glb = n * msh%glb_nelv
 
+  call neko_log%section('Begin BK5 Run')
   call set_timer_flop_cnt(0, msh%glb_nelv, Xh%lx, niter, n_glb)
   do i = 1, niter
      call bk5_kernel%compute(w%x, u%x, c_Xh, msh, Xh)
   end do
   call set_timer_flop_cnt(1, msh%glb_nelv, Xh%lx, niter, n_glb)
+ 
 
   call field_free(u)
   call field_free(w)
@@ -97,6 +99,7 @@ subroutine set_timer_flop_cnt(iset, nelt, nx1, niter, n)
      time1 = time1-time0
      flop_a = (15d0 * nxyz + 12d0 * nx * nxyz) * dble(nelt) * dble(niter)
      if (time1 .gt. 0) gflops = (flop_a)/(1.d9*time1)
+     call neko_log%end_section('Done!') ! Close BK5 run section
      call neko_log%section("BK5 Result")
      write(log_buf, '(A,1pE12.4)') 'GFlops  :', gflops
      call neko_log%message(log_buf)
@@ -110,7 +113,7 @@ subroutine set_timer_flop_cnt(iset, nelt, nx1, niter, n)
         write(log_buf, '(A, I3)') 'lx      :  ', nx1
      end if
      call neko_log%message(log_buf)
-     call neko_log%end()
+     call neko_log%end_section()
   endif
 
 end subroutine set_timer_flop_cnt
