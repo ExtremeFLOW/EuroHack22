@@ -9,11 +9,11 @@ module ax_bk5
   end type ax_bk5_t
 
   interface
-     subroutine ax_bk5_kernel(w, u, g1, g2, g3, g4, g5, g6, dx, dy, dz, nelv, lx) &
+     subroutine ax_bk5_kernel(w, u, dx, dy, dz, g1, g2, g3, g4, g5, g6, nelv, lx) &
           bind(c, name='cuda_ax_bk5')
        use, intrinsic :: iso_c_binding
        implicit none
-       type(c_ptr), value :: w, u, g1, g2, g3, g4, g5, g6, dx, dy, dz
+       type(c_ptr), value :: w, u, dx, dy, dz, g1, g2, g3, g4, g5, g6
        integer(c_int) :: nelv, lx
      end subroutine ax_bk5_kernel
   end interface
@@ -32,9 +32,10 @@ contains
     u_d = device_get_ptr(u)
 
     call ax_bk5_kernel(w_d, u_d, &
+         Xh%dx_d, Xh%dy_d, Xh%dz_d, &
          coef%g11_d, coef%g22_d, coef%g33_d, &
          coef%g12_d, coef%g13_d, coef%g23_d, &
-         Xh%dx_d, Xh%dy_d, Xh%dz_d, msh%nelv, Xh%lx)
+         msh%nelv, Xh%lx)
 
   end subroutine ax_bk5_compute
   
